@@ -7,7 +7,8 @@ import {
   Settings,
   ChevronUp,
 } from "lucide-react";
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
+import { useHashLocation } from "wouter/use-hash-location";
 import {
   Sidebar,
   SidebarContent,
@@ -32,7 +33,7 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  const [location] = useLocation();
+  const [location] = useHashLocation();
 
   return (
     <Sidebar>
