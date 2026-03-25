@@ -11,6 +11,7 @@ import {
   Globe,
   TrendingUp,
   Shield,
+  Info,
 } from "lucide-react";
 
 const features = [
@@ -93,6 +94,17 @@ export default function Landing() {
           </Link>
         </div>
       </header>
+
+      {/* Demo Banner */}
+      <div className="w-full bg-primary/5 border-b border-primary/10">
+        <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-center gap-2.5">
+          <Info className="h-4 w-4 text-primary shrink-0" />
+          <p className="text-sm text-primary">
+            <span className="font-semibold">Mode Demo</span>
+            <span className="text-primary/70"> — Silakan klik Masuk atau Daftar untuk menjelajahi seluruh fitur dan menu di dalam aplikasi.</span>
+          </p>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="flex-1 flex flex-col items-center justify-center px-6 py-16 md:py-24 text-center max-w-4xl mx-auto">
