@@ -124,14 +124,7 @@ export function AppSidebar() {
 
       <SidebarFooter className="p-4 pt-2">
         <div className="text-xs text-muted-foreground text-center">
-          <a
-            href="https://www.perplexity.ai/computer"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            Created with Perplexity Computer
-          </a>
+            Created by YouthFin Innovators
         </div>
       </SidebarFooter>
     </Sidebar>
