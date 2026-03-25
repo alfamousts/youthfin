@@ -6,10 +6,20 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Bell } from "lucide-react";
+import { Bell, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { AuthProvider, useAuth } from "@/lib/auth";
 
+import Landing from "@/pages/landing";
+import { LoginPage, RegisterPage } from "@/pages/auth";
 import Beranda from "@/pages/beranda";
 import SkillUp from "@/pages/skill-up";
 import JobGlobal from "@/pages/job-global";
@@ -25,7 +35,7 @@ const topNavItems = [
   { label: "Dashboard", href: "/" },
 ];
 
-function AppRouter() {
+function DashboardRouter() {
   return (
     <Switch>
       <Route path="/" component={Beranda} />
@@ -35,6 +45,46 @@ function AppRouter() {
       <Route path="/profil" component={ProfilAI} />
       <Route component={NotFound} />
     </Switch>
+  );
+}
+
+function AvatarDropdown() {
+  const { logout } = useAuth();
+  const [, navigate] = useHashLocation();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="rounded-full focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" data-testid="button-avatar-menu">
+          <Avatar className="h-8 w-8 cursor-pointer">
+            <AvatarImage src="https://api.dicebear.com/9.x/notionists/svg?seed=Andi" />
+            <AvatarFallback>AR</AvatarFallback>
+          </Avatar>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuItem
+          className="gap-2 cursor-pointer"
+          onClick={() => navigate("/profil")}
+          data-testid="menu-profil"
+        >
+          <User className="h-4 w-4" />
+          Profil
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="gap-2 cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400"
+          onClick={() => {
+            logout();
+            navigate("/landing");
+          }}
+          data-testid="menu-logout"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -60,36 +110,66 @@ function TopHeader() {
         <Button size="icon" variant="ghost" data-testid="button-notification">
           <Bell className="h-4 w-4" />
         </Button>
-        <Avatar className="h-8 w-8 cursor-pointer">
-          <AvatarImage src="https://api.dicebear.com/9.x/notionists/svg?seed=Andi" />
-          <AvatarFallback>AR</AvatarFallback>
-        </Avatar>
+        <AvatarDropdown />
       </div>
     </header>
   );
 }
 
-export default function App() {
+function DashboardLayout() {
   const style = {
     "--sidebar-width": "16rem",
     "--sidebar-width-icon": "3rem",
   };
 
   return (
+    <SidebarProvider style={style as React.CSSProperties}>
+      <div className="flex h-screen w-full">
+        <AppSidebar />
+        <div className="flex flex-col flex-1 min-w-0">
+          <TopHeader />
+          <main className="flex-1 overflow-y-auto">
+            <DashboardRouter />
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
+
+function AuthenticatedApp() {
+  const { isAuthenticated } = useAuth();
+
+  if (!isAuthenticated) {
+    return (
+      <Switch>
+        <Route path="/masuk" component={LoginPage} />
+        <Route path="/daftar" component={RegisterPage} />
+        <Route component={Landing} />
+      </Switch>
+    );
+  }
+
+  return (
+    <Switch>
+      <Route path="/landing" component={Landing} />
+      <Route path="/masuk" component={LoginPage} />
+      <Route path="/daftar" component={RegisterPage} />
+      <Route>
+        <DashboardLayout />
+      </Route>
+    </Switch>
+  );
+}
+
+export default function App() {
+  return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Router hook={useHashLocation}>
-          <SidebarProvider style={style as React.CSSProperties}>
-            <div className="flex h-screen w-full">
-              <AppSidebar />
-              <div className="flex flex-col flex-1 min-w-0">
-                <TopHeader />
-                <main className="flex-1 overflow-y-auto">
-                  <AppRouter />
-                </main>
-              </div>
-            </div>
-          </SidebarProvider>
+          <AuthProvider>
+            <AuthenticatedApp />
+          </AuthProvider>
         </Router>
         <Toaster />
       </TooltipProvider>
