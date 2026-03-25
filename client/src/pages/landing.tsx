@@ -272,14 +272,7 @@ export default function Landing() {
       <footer className="px-6 md:px-12 py-6 border-t border-border/50 text-center">
         <p className="text-xs text-muted-foreground">
           &copy; 2026 YouthFin — Digitalisasi Penciptaan Lapangan Kerja.{" "}
-          <a
-            href="https://www.perplexity.ai/computer"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            Created with Perplexity Computer
-          </a>
+          <p>Created by YouthFin Innovators</p>
         </p>
       </footer>
     </div>
