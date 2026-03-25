@@ -1,4 +1,4 @@
-import { Switch, Route, Router } from "wouter";
+import { Switch, Route, Router, Link } from "wouter";
 import { useHashLocation } from "wouter/use-hash-location";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -6,10 +6,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 
 import Beranda from "@/pages/beranda";
 import SkillUp from "@/pages/skill-up";
@@ -17,6 +16,14 @@ import JobGlobal from "@/pages/job-global";
 import WalletPage from "@/pages/wallet";
 import ProfilAI from "@/pages/profil-ai";
 import NotFound from "@/pages/not-found";
+
+const topNavItems = [
+  { label: "Beranda", href: "/" },
+  { label: "Skill-Up", href: "/skill-up" },
+  { label: "Job Global", href: "/job-global" },
+  { label: "Wallet", href: "/wallet" },
+  { label: "Dashboard", href: "/" },
+];
 
 function AppRouter() {
   return (
@@ -37,16 +44,15 @@ function TopHeader() {
       <div className="flex items-center gap-2">
         <SidebarTrigger data-testid="button-sidebar-toggle" />
         <nav className="hidden md:flex items-center gap-1 ml-2">
-          {["Beranda", "Skill-Up", "Job Global", "Wallet", "Dashboard"].map(
-            (item) => (
-              <span
-                key={item}
-                className="text-sm text-muted-foreground px-2.5 py-1 rounded-md hover:text-foreground transition-colors cursor-pointer"
-              >
-                {item}
-              </span>
-            )
-          )}
+          {topNavItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="text-sm text-muted-foreground px-2.5 py-1 rounded-md hover:text-foreground transition-colors cursor-pointer no-underline"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </div>
 
@@ -72,19 +78,19 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <SidebarProvider style={style as React.CSSProperties}>
-          <div className="flex h-screen w-full">
-            <AppSidebar />
-            <div className="flex flex-col flex-1 min-w-0">
-              <TopHeader />
-              <main className="flex-1 overflow-y-auto">
-                <Router hook={useHashLocation}>
+        <Router hook={useHashLocation}>
+          <SidebarProvider style={style as React.CSSProperties}>
+            <div className="flex h-screen w-full">
+              <AppSidebar />
+              <div className="flex flex-col flex-1 min-w-0">
+                <TopHeader />
+                <main className="flex-1 overflow-y-auto">
                   <AppRouter />
-                </Router>
-              </main>
+                </main>
+              </div>
             </div>
-          </div>
-        </SidebarProvider>
+          </SidebarProvider>
+        </Router>
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
