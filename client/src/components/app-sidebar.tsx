@@ -25,7 +25,7 @@ import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { title: "Overview", url: "/", icon: LayoutDashboard },
-  { title: "Profil AI", url: "/profil-ai", icon: Brain },
+  { title: "Profil", url: "/profil", icon: Brain },
   { title: "Skill-Up", url: "/skill-up", icon: BookOpen },
   { title: "Job Global", url: "/job-global", icon: Briefcase },
   { title: "Wallet", url: "/wallet", icon: Wallet },

@@ -32,7 +32,7 @@ function AppRouter() {
       <Route path="/skill-up" component={SkillUp} />
       <Route path="/job-global" component={JobGlobal} />
       <Route path="/wallet" component={WalletPage} />
-      <Route path="/profil-ai" component={ProfilAI} />
+      <Route path="/profil" component={ProfilAI} />
       <Route component={NotFound} />
     </Switch>
   );
